@@ -23,6 +23,25 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const autoResponseText = (r) => {
+    if (r.name.trim() === '') {
+        if (r.orginization.trim() === '') {
+            return `Thank you for your message, I will get back to you as soon as I can.`;
+        }
+        else {
+            return `Thank you for contacing me from ${r.orginization}, I will get back to you as soon as I can.`;
+        }
+    }
+    else {
+        if (r.orginization.trim() === '') {
+            return `Thank you for contacing me ${r.name}, I will get back to you as soon as I can.`;
+        }
+        else {
+            return `Thank you ${r.name} for contacting me from ${r.orginization}, I will get back to you as soon as I can.`;
+        }
+    }
+}
+
 transporter.verify((err, success) => {
     if (err) { console.log('Transporter Error', err); }
     else { console.log('Successful connection', success); }
@@ -37,10 +56,42 @@ app.get('/', (req, res) => {
 
 // Route to handle emails
 app.post('/', (req, res) => {
-    console.log('Email sent', req.body);
-    res.send(req.body);
-})
-
-
+    let r = req.body;
+    console.log('Email sent', r);
+    let text = autoResponseText(r);
+    
+    // Send notification to myself
+    let mailOptions = {
+        from: process.env.GMAIL_ADDRESS,
+        to: process.env.GMAIL_ADDRESS,
+        subject: `Contact Portfolio from Orgination: ${r.orginization}`,
+        text: `Message: ${r.message}\nEmail: ${r.email}\nName ${r.name}`
+    }
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) { 
+            console.log(err); 
+        }
+        else {
+            console.log('Successfully sent info');
+        }
+        // Send Automatic Response
+        mailOptions = {
+            from: process.env.GMAIL_ADDRESS,
+            to: req.body.email,
+            subject: 'Auto Reply: Jacob Cacciamani Developer Contact',
+            text: text
+        };
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) { 
+                console.log(err); 
+                res.send(500);
+            }
+            else {
+                console.log(`Message ${info.messageId} sent ${info.response}`);
+                res.send(200);
+            }
+        });
+    });
+});
 
 app.listen(PORT);
