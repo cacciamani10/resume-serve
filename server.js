@@ -67,7 +67,6 @@ app.post('/', (req, res) => {
         subject: `Contact Portfolio from Orgination: ${r.orginization}`,
         text: `Message: ${r.message}\nEmail: ${r.email}\nName ${r.name}`
     }
-    console.log('Sending notification!!')
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) { 
             console.log(err); 
@@ -76,7 +75,6 @@ app.post('/', (req, res) => {
             console.log('Successfully sent info');
         }
         // Send Automatic Response
-        console.log('Sending auto!!')
         mailOptions = {
             from: process.env.GMAIL_ADDRESS,
             to: req.body.email,
@@ -86,11 +84,11 @@ app.post('/', (req, res) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) { 
                 console.log(err); 
-                res.send(500);
+                res.sendStatus(500);
             }
             else {
-                console.log(`Message ${info.messageId} sent ${info.response}`);
-                res.send(200);
+                console.log('Finished email sequence');
+                res.sendStatus(200);
             }
         });
     });
