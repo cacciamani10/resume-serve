@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 // Route to handle emails
 app.post('/', (req, res) => {
-    console.log(req);
+    console.log('Email sent', req.body);
     //let text;
     // Add in logic for which fields are filled out to customize which email to send
 
