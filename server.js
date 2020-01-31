@@ -36,25 +36,7 @@ app.get('/', (req, res) => {
 // Route to handle emails
 app.post('/', (req, res) => {
     console.log('Email sent', req.body);
-    //let text;
-    // Add in logic for which fields are filled out to customize which email to send
-
-    // if (req.orginization === '' && req.) {
-    //     text = `Thank you for contacting me. This is an automatic`
-    // }
-    // let mailReply = {
-    //     from: process.env.GMAIL_ADDRESS,
-    //     to: req.body.email,
-    //     subject: 'Thank you for your message',
-    //     text: `Thank you for contacting me from ${req.orginization}`
-    // };
-    // transporter.sendMail(mailOptions, (err, info) => {
-    //     if (err) { console.log(err); }
-    //     else {
-    //       console.log(`Message ${info.messageId} sent ${info.response}`);
-    //       res.redirect('/login');
-    //     }
-    // });
+    res.send(req.body);
 })
 
 
