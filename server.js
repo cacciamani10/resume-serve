@@ -3,8 +3,13 @@ const PORT = process.env.PORT || 5000;
 const fs = require('fs');
 const express = require('express');
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Startup Email Service
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -15,6 +20,7 @@ const transporter = nodemailer.createTransport({
         pass: process.env.GMAIL_PASSWORD
   }
 });
+
 transporter.verify((err, success) => {
     if (err) { console.log('Transporter Error', err); }
     else { console.log('Successful connection', success); }
@@ -29,7 +35,8 @@ app.get('/', (req, res) => {
 
 // Route to handle emails
 app.post('/', (req, res) => {
-    let text;
+    console.log(req);
+    //let text;
     // Add in logic for which fields are filled out to customize which email to send
 
     // if (req.orginization === '' && req.) {
