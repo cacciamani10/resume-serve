@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
 // Route to handle emails
 app.post('/', (req, res) => {
     let r = req.body;
-    console.log('Email sent', r);
+    console.log('Request received', r);
     let text = autoResponseText(r);
     
     // Send notification to myself
@@ -67,6 +67,7 @@ app.post('/', (req, res) => {
         subject: `Contact Portfolio from Orgination: ${r.orginization}`,
         text: `Message: ${r.message}\nEmail: ${r.email}\nName ${r.name}`
     }
+    console.log('Sending notification!!')
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) { 
             console.log(err); 
@@ -75,6 +76,7 @@ app.post('/', (req, res) => {
             console.log('Successfully sent info');
         }
         // Send Automatic Response
+        console.log('Sending auto!!')
         mailOptions = {
             from: process.env.GMAIL_ADDRESS,
             to: req.body.email,
