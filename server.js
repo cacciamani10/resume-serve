@@ -49,7 +49,7 @@ transporter.verify((err, success) => {
 
 // Route to serve resume
 app.get('/', (req, res) => {
-    var data = fs.readFileSync('./pdf/Resume_Jacob_Cacciamani_2021.pdf');
+    const data = fs.readFileSync('./pdf/Resume_Jacob_Cacciamani_2021.pdf');
     res.contentType("application/pdf");
     res.send(data);
 });
